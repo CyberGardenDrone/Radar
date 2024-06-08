@@ -66,12 +66,12 @@ int register_client(clientinfo ci)
 void print_beacon(beaconinfo beacon)
 {
   if (beacon.err == 0) {
-    Serial.printf("R ", beacon.ssid);
+    Serial.printf("ROUTER: <-------------------- {%32s}  ", beacon.ssid);
     for (int i = 0; i < 5; i++) Serial.printf("%02x:", beacon.bssid[i]);
     Serial.printf("%02x", beacon.bssid[5]);
-    Serial.printf(" %2d", beacon.channel);
-    Serial.printf(" %4d", beacon.rssi);
-    Serial.print("\n\r");
+    Serial.printf("   %2d", beacon.channel);
+    Serial.printf("   %4d", beacon.rssi);
+    Serial.printf("\r\n");
   }
 }
 
@@ -80,30 +80,38 @@ void print_client(clientinfo ci)
   int u = 0;
   int known = 0;   
   if (ci.err ==0) {
-    Serial.printf("D ");
+    Serial.printf("DEVICE: ");
     for (int i = 0; i < 5; i++) Serial.printf("%02x:", ci.station[i]);
-    Serial.printf("%02x ", ci.station[5]);
+    Serial.printf("%02x", ci.station[5]);
+    Serial.printf(" --> ");
+
     for (u = 0; u < aps_known_count; u++)
     {
       if (!memcmp(aps_known[u].bssid, ci.bssid, 6)) {
-        Serial.printf( "%s ", aps_known[u].ssid);
+        Serial.printf("{%32s}", aps_known[u].ssid);
         known = 1;
         break;
       }
     }
     
-    if (!known)  {
-      Serial.print("U ? ? ");
-      Serial.printf("%4d ", ci.rssi);      
+    if (! known)  {
+      Serial.printf("{%32s}", "AP UNKNOWN");
+      Serial.printf("%2s", " ");
+      Serial.printf("%17s","  ???");
+      Serial.printf("  ???");
+      Serial.printf("   %4d", ci.rssi);      
     } else {
+      Serial.printf("%2s", " ");
       for (int i = 0; i < 5; i++) Serial.printf("%02x:", ci.bssid[i]);
-      Serial.printf("%02x ", ci.bssid[5]);
-      Serial.printf(" %3d ", aps_known[u].channel);
-      Serial.printf(" %4d ", ci.rssi);
-     }
-  Serial.println();
+      Serial.printf("%02x", ci.bssid[5]);
+      Serial.printf("  %3d", aps_known[u].channel);
+      Serial.printf("   %4d", ci.rssi);
+    }
+  }
+  Serial.printf("\r\n");
+
 }
-}
+
 void promisc_cb(uint8_t *buf, uint16_t len)
 {
   signed ssi;

@@ -7,9 +7,9 @@ int8 chan = 1;
 void setup() 
 {
   Serial.begin(9600);
-  Serial.printf("\n\t           ♥ SDK version: %s\n\r", system_get_sdk_version());
-  Serial.println(F("\n\r        ♥ CGD network scanner using ESP8266, by winners team"));  
-  Serial.println(F("\n\r        |=========MAC=========|=====WiFi Access Point SSID=====|  |======MAC======|  Chnl  RSSI  APs  DEVs"));
+  //Serial.printf("\n\t           ♥ SDK version: %s\n\r", system_get_sdk_version());
+  //Serial.println(F("\n\r        ♥ CGD network scanner using ESP8266, by winners team"));  
+  //Serial.println(F("\n\r        |=========MAC=========|=====WiFi Access Point SSID=====|  |======MAC======|  Chnl  RSSI  "));
   //Magic, dont touch those
   wifi_set_opmode(STATION_MODE);
   wifi_set_channel(chan);
